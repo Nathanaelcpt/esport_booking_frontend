@@ -1,12 +1,16 @@
-export function connectWebSocket(onMessage) {
-  const socket = new WebSocket(process.env.REACT_APP_WS_URL);
+export function connectWebSocket(onMessageCallback) {
+  const socket = new WebSocket("ws://localhost:3001/socket"); // Sesuaikan URL WebSocket
 
-  socket.onmessage = (event) => {
-    onMessage(event.data);
+  socket.onopen = () => {
+    console.log("WebSocket connection established.");
   };
 
-  socket.onclose = () => {
-    console.log("WebSocket disconnected");
+  socket.onmessage = (event) => {
+    onMessageCallback(event.data); // Menangani pesan WebSocket
+  };
+
+  socket.onerror = (error) => {
+    console.error("WebSocket Error: ", error);
   };
 
   return socket;

@@ -1,23 +1,28 @@
-const API_BASE = process.env.REACT_APP_API_BASE;
+import api from "./axios"; // Menggunakan axios instance
 
-export async function fetchSeats() {
-  const response = await fetch(`${API_BASE}/seats/1`);
-  return response.json();
-}
-
-export async function bookSeat(seatId) {
-  const response = await fetch(`${API_BASE}/book`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-    body: JSON.stringify({ seat_id: seatId }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to book seat");
+export const fetchSeats = async () => {
+  try {
+    const response = await api.get("/seats");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching seats:", error);
+    return [];
   }
+};
 
-  return response.json();
-}
+export const bookSeat = async (seatId) => {
+  try {
+    const token = localStorage.getItem("token");
+    await api.post(
+      "/book",
+      { seatId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  } catch (error) {
+    console.error("Error booking seat:", error);
+  }
+};

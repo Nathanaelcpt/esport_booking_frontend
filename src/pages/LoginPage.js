@@ -1,22 +1,25 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../utils/axios"; // Import axios instance
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  //   const history = useHistory();
-
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/login", { email, password });
+      // Mengirimkan data login ke backend
+      const response = await api.post("/login", { email: email, password });
+
+      // Menyimpan token yang diterima di localStorage
       localStorage.setItem("token", response.data.token);
-      navigate.push("/dashboard");
+
+      // Mengarahkan pengguna ke halaman booking setelah login berhasil
+      navigate("/");
     } catch (err) {
       setError("Invalid credentials, please try again.");
     }
