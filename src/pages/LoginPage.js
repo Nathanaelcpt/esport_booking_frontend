@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const history = useHistory();
+  //   const history = useHistory();
+
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post("/api/login", { email, password });
       localStorage.setItem("token", response.data.token);
-      history.push("/dashboard");
+      navigate.push("/dashboard");
     } catch (err) {
       setError("Invalid credentials, please try again.");
     }

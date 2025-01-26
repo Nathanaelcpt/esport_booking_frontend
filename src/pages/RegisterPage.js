@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -8,7 +8,8 @@ function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  const history = useHistory();
+  //   const history = useHistory();
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -18,7 +19,7 @@ function RegisterPage() {
     }
     try {
       await axios.post("/api/register", { email, password });
-      history.push("/login");
+      navigate.push("/login");
     } catch (err) {
       setError("Error occurred while registering. Please try again.");
     }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import SeatGrid from "./components/SeatGrid";
+import SeatGrid from "../components/SeatGrid";
 import { fetchSeats, bookSeat } from "../utils/api";
 import { connectWebSocket } from "../utils/websocket";
 
