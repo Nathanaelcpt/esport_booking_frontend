@@ -1,5 +1,7 @@
 export function connectWebSocket(onMessageCallback) {
-  const socket = new WebSocket("ws://localhost:3001/socket"); // Sesuaikan URL WebSocket
+  const socket = new WebSocket(
+    "ws://esportbookingbackend-production.up.railway.app/ws"
+  ); // Sesuaikan URL WebSocket
 
   socket.onopen = () => {
     console.log("WebSocket connection established.");

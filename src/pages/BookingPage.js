@@ -6,8 +6,14 @@ import { connectWebSocket } from "../utils/websocket"; // WebSocket connection
 
 // Fungsi untuk mengambil data tournament
 async function fetchTournaments() {
-  const response = await fetch("/tournaments");
+  const token = localStorage.getItem("token");
+  const response = await fetch("/api/tournaments", {
+    headers: {
+      Authorization: `Bearer ${token}`, // Menambahkan JWT token ke header
+    },
+  });
   const data = await response.json();
+  console.log(data); // Log data untuk melihat respons
   return data;
 }
 
@@ -24,14 +30,6 @@ function BookingPage() {
       return;
     }
 
-    // Mengambil data kursi dari backend
-    async function loadSeats() {
-      const data = await fetchSeats();
-      setSeats(data);
-    }
-
-    loadSeats();
-
     // Mengambil data tournament dari backend
     async function loadTournaments() {
       const data = await fetchTournaments();
@@ -39,18 +37,6 @@ function BookingPage() {
     }
 
     loadTournaments();
-
-    // Menghubungkan ke WebSocket untuk update status kursi secara real-time
-    const socket = connectWebSocket((message) => {
-      const updatedSeat = JSON.parse(message);
-      setSeats((prevSeats) =>
-        prevSeats.map((seat) =>
-          seat.id === updatedSeat.id ? { ...seat, ...updatedSeat } : seat
-        )
-      );
-    });
-
-    return () => socket.close(); // Menutup WebSocket saat komponen unmount
   }, [navigate]);
 
   const handleSeatClick = async (seat) => {
@@ -66,7 +52,7 @@ function BookingPage() {
   return (
     <div>
       <h1>Book Your Seat</h1>
-      <SeatGrid seats={seats} onSeatClick={handleSeatClick} />
+      {/* <SeatGrid seats={seats} onSeatClick={handleSeatClick} /> */}
 
       {/* Tabel Tournament */}
       <h2>Tournaments</h2>
